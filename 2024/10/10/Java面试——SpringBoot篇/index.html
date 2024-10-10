@@ -1,0 +1,939 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/bitbug_favicon.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="柴勇玛喜达">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="前置知识 ApplicationContextInitializer ApplicationContextInitializer是Spring框架中的一个扩展接口，用于在应用程序上下文（ApplicationContext）创建之前对其进行自定义初始化。通过实现该接口，您可以在应用程序上下文启动之前执行一些额外的配置或准备工作。   应用场景   动态加载配置：通过实现ApplicationCon">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java面试——SpringBoot篇">
+<meta property="og:url" content="https://blog.guxiang.lol/2024/10/10/Java%E9%9D%A2%E8%AF%95%E2%80%94%E2%80%94SpringBoot%E7%AF%87/index.html">
+<meta property="og:site_name" content="柴勇玛喜达のBLOG">
+<meta property="og:description" content="前置知识 ApplicationContextInitializer ApplicationContextInitializer是Spring框架中的一个扩展接口，用于在应用程序上下文（ApplicationContext）创建之前对其进行自定义初始化。通过实现该接口，您可以在应用程序上下文启动之前执行一些额外的配置或准备工作。   应用场景   动态加载配置：通过实现ApplicationCon">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://blog.guxiang.lol/2024/10/10/Java%E9%9D%A2%E8%AF%95%E2%80%94%E2%80%94SpringBoot%E7%AF%87/1725187627897-b413ec69-2287-4a4b-810f-fc33c3210559.png">
+<meta property="og:image" content="https://blog.guxiang.lol/2024/10/10/Java%E9%9D%A2%E8%AF%95%E2%80%94%E2%80%94SpringBoot%E7%AF%87/1725186961167-080d83fd-0330-4a7c-84ea-a38141dd7585.png">
+<meta property="og:image" content="https://blog.guxiang.lol/2024/10/10/Java%E9%9D%A2%E8%AF%95%E2%80%94%E2%80%94SpringBoot%E7%AF%87/1725187658224-155ccf1f-25fa-4766-905f-7868647cb67b.png">
+<meta property="og:image" content="https://blog.guxiang.lol/2024/10/10/Java%E9%9D%A2%E8%AF%95%E2%80%94%E2%80%94SpringBoot%E7%AF%87/1725187658193-0d041178-b911-42de-8021-825c9fc07027.png">
+<meta property="og:image" content="https://blog.guxiang.lol/2024/10/10/Java%E9%9D%A2%E8%AF%95%E2%80%94%E2%80%94SpringBoot%E7%AF%87/1725187658117-71f19325-413e-4eb8-a6eb-94e98baf1127.png">
+<meta property="og:image" content="https://blog.guxiang.lol/2024/10/10/Java%E9%9D%A2%E8%AF%95%E2%80%94%E2%80%94SpringBoot%E7%AF%87/1725187675291-d0fff1ec-483d-4078-910a-3e61bc2ee9e7.png">
+<meta property="og:image" content="https://blog.guxiang.lol/2024/10/10/Java%E9%9D%A2%E8%AF%95%E2%80%94%E2%80%94SpringBoot%E7%AF%87/1725187675279-2a760d6e-8369-472a-9811-ca15d08538e0.png">
+<meta property="og:image" content="https://blog.guxiang.lol/2024/10/10/Java%E9%9D%A2%E8%AF%95%E2%80%94%E2%80%94SpringBoot%E7%AF%87/1725187689406-6ad8c83e-eb9c-416a-8566-d19cde17fb60.png">
+<meta property="og:image" content="https://blog.guxiang.lol/2024/10/10/Java%E9%9D%A2%E8%AF%95%E2%80%94%E2%80%94SpringBoot%E7%AF%87/1725187697449-c4f334b5-f514-4465-83fd-84217bbd6e41.png">
+<meta property="og:image" content="https://blog.guxiang.lol/2024/10/10/Java%E9%9D%A2%E8%AF%95%E2%80%94%E2%80%94SpringBoot%E7%AF%87/1725187713651-2076b85c-a651-412a-b855-419ecaaedae9.png">
+<meta property="og:image" content="https://blog.guxiang.lol/2024/10/10/Java%E9%9D%A2%E8%AF%95%E2%80%94%E2%80%94SpringBoot%E7%AF%87/1725187727190-4965d62d-9804-4e33-bfd7-f35a048e2e17-172856656426912.png">
+<meta property="og:image" content="https://blog.guxiang.lol/2024/10/10/Java%E9%9D%A2%E8%AF%95%E2%80%94%E2%80%94SpringBoot%E7%AF%87/1725187726518-ef7d09e4-471f-4567-a1a5-fd8fa2b35f10.png">
+<meta property="og:image" content="https://blog.guxiang.lol/2024/10/10/Java%E9%9D%A2%E8%AF%95%E2%80%94%E2%80%94SpringBoot%E7%AF%87/1725239887791-018247f7-97ee-4025-8ce2-2762678ef040.png">
+<meta property="og:image" content="https://blog.guxiang.lol/2024/10/10/Java%E9%9D%A2%E8%AF%95%E2%80%94%E2%80%94SpringBoot%E7%AF%87/1725269735691-83b7cae9-18f2-4afa-8c58-cc6ff1f07ab4.png">
+<meta property="og:image" content="https://blog.guxiang.lol/2024/10/10/Java%E9%9D%A2%E8%AF%95%E2%80%94%E2%80%94SpringBoot%E7%AF%87/1725270255880-7fee4917-9ac3-4d36-961a-5e0b35fa2121.png">
+<meta property="og:image" content="https://blog.guxiang.lol/2024/10/10/Java%E9%9D%A2%E8%AF%95%E2%80%94%E2%80%94SpringBoot%E7%AF%87/1725271239323-8966145d-d264-4f63-bebe-294c2b713e6d.png">
+<meta property="og:image" content="https://blog.guxiang.lol/2024/10/10/Java%E9%9D%A2%E8%AF%95%E2%80%94%E2%80%94SpringBoot%E7%AF%87/1725271319052-292cbd71-9a06-4d32-a0e8-a3d38d256230.png">
+<meta property="og:image" content="https://blog.guxiang.lol/2024/10/10/Java%E9%9D%A2%E8%AF%95%E2%80%94%E2%80%94SpringBoot%E7%AF%87/1725342427033-0e236bc9-c218-4b1a-b7b8-22d32e8b4dc7.png">
+<meta property="og:image" content="https://blog.guxiang.lol/2024/10/10/Java%E9%9D%A2%E8%AF%95%E2%80%94%E2%80%94SpringBoot%E7%AF%87/1725343132168-ec215d6c-26c2-4ee9-a440-d4f960184fea.png">
+<meta property="article:published_time" content="2024-10-10T09:22:57.604Z">
+<meta property="article:modified_time" content="2024-10-10T13:32:28.749Z">
+<meta property="article:author" content="柴勇玛喜达">
+<meta property="article:tag" content="面试">
+<meta property="article:tag" content="JAVA">
+<meta property="article:tag" content="SpringBoot">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://blog.guxiang.lol/2024/10/10/Java%E9%9D%A2%E8%AF%95%E2%80%94%E2%80%94SpringBoot%E7%AF%87/1725187627897-b413ec69-2287-4a4b-810f-fc33c3210559.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>Java面试——SpringBoot篇 - 柴勇玛喜达のBLOG</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/EmoryHuang/BlogBeautify@1.1/shubiao.css">
+<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/EmoryHuang/BlogBeautify@1.1/scroll.css">
+<link rel="stylesheet" href="/css/cloudedGlass.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"blog.guxiang.lol","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":["home"]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body><!-- hexo injector body_begin start --><div id="web_bg"></div><!-- hexo injector body_begin end -->
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 50vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>柴勇玛喜达</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle">Java面试——SpringBoot篇</span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-10-10 17:22" pubdate>
+          2024年10月10日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          27 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Java面试——SpringBoot篇</h1>
+            
+              <p id="updated-time" class="note note-info" style="display: none">
+                
+                  
+                    本文最后更新于 2024-10-10T21:32:28+08:00
+                  
+                  
+
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="dlN81">前置知识</h2>
+<h3 id="u6xLT">ApplicationContextInitializer</h3>
+ApplicationContextInitializer是Spring框架中的一个扩展接口，用于在应用程序上下文（ApplicationContext）创建之前对其进行自定义初始化。通过实现该接口，您可以在应用程序上下文启动之前执行一些额外的配置或准备工作。
+
+<p><img src="/2024/10/10/Java%E9%9D%A2%E8%AF%95%E2%80%94%E2%80%94SpringBoot%E7%AF%87/1725187627897-b413ec69-2287-4a4b-810f-fc33c3210559.png" srcset="/img/loading.gif" lazyload></p>
+<h4 id="mQPOk">应用场景</h4>
+
+<ul>
+<li>动态加载配置：通过实现ApplicationContextInitializer，您可以在应用程序上下文创建之前加载一些动态的配置，例如从外部配置文件中读取配置信息并注入到Spring的环境中。</li>
+<li>执行额外的初始化逻辑：如果您有一些需要在应用程序上下文启动之前执行的初始化逻辑，例如初始化<a target="_blank" rel="noopener" href="https://cloud.tencent.com/solution/database?from_column=20065&from=20065">数据库</a>连接池或启动一些后台任务，您可以通过实现ApplicationContextInitializer来实现这些逻辑。</li>
+</ul>
+<h4 id="baXim">使用方式</h4>
+1.定义ApplicationContextInitializer的实现类MyApplicationContextInitializer，进行属性注入
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">MyApplicationContextInitializer</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">ApplicationContextInitializer</span>&#123;<br>    <span class="hljs-comment">//ioc容器对象创建完毕后执行</span><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">initialize</span><span class="hljs-params">(ConfigurableApplicationContext applicationContext)</span>&#123;<br>        <span class="hljs-comment">//给上下文context对象注入环境属性</span><br>        <span class="hljs-comment">//1.准备属性</span><br>        Map&lt;String,Object&gt;myMap <span class="hljs-keyword">new</span> <span class="hljs-title class_">HashMap</span>&lt;&gt;();<br>        myMap.put(<span class="hljs-string">&quot;applicationName&quot;</span>,<span class="hljs-string">&quot;big-event&#x27;);</span><br><span class="hljs-string">        //2,获取一个属性资源管理对象</span><br><span class="hljs-string">        //获取的环境对象</span><br><span class="hljs-string">        ConfigurableEnvironment environment applicationContext.getEnvironment();</span><br><span class="hljs-string">        //属性资源管理对象</span><br><span class="hljs-string">        MutablePropertySources propertySources environment.getPropertySources();</span><br><span class="hljs-string">        /13.注册</span><br><span class="hljs-string">        propertySources.addLast(new MapPropertySource(name:&quot;</span>myMap<span class="hljs-string">&quot;,myMap));</span><br><span class="hljs-string">    &#125;</span><br><span class="hljs-string">&#125;</span><br><span class="hljs-string"></span><br></code></pre></td></tr></table></figure>
+
+<p>2.在META-lNF&#x2F;spring.factories配置文件中配置自定义的类</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs javascript"># 接口全路径名称=自定义类的全路径名称<br>org.<span class="hljs-property">springframework</span>.<span class="hljs-property">context</span>.<span class="hljs-property">ApplicationContextInitializer</span>=com.<span class="hljs-property">itheima</span>.<span class="hljs-property">initializer</span>.<span class="hljs-property">MyApplicationContextInitializer</span><br></code></pre></td></tr></table></figure>
+
+<p>3.在启动类中获取注入的属性</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@SpringBootApplication</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">App</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[]args)</span>&#123;<br>        <span class="hljs-type">ConfigurableApplicationContext</span> <span class="hljs-variable">context</span> <span class="hljs-operator">=</span> SpringApplication.run(App.class,args);<br>        String applicationName context.getEnvironment().getProperty(<span class="hljs-string">&quot;applicationName&quot;</span>);<br>        System.out.println(applicationName);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="SVdH4">ApplicationListener</h3>
+监听容器发布的事件，允许程序员执行自己的代码，完成事件驱动开发，它可以监听容器初始化完成、初始化失败等事件。通常情况下可以使用监听器加载资源，开启定时任务等
+
+<p><img src="/2024/10/10/Java%E9%9D%A2%E8%AF%95%E2%80%94%E2%80%94SpringBoot%E7%AF%87/1725186961167-080d83fd-0330-4a7c-84ea-a38141dd7585.png" srcset="/img/loading.gif" lazyload></p>
+<h4 id="gSkTu">使用方式</h4>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">MyListener</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">ApplicationListener</span> &#123;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">onApplicationEvent</span><span class="hljs-params">(ApplicationEvent event)</span>&#123;<br>        <span class="hljs-comment">//ApplicationEvent event对应的就是发布的事件，ApplicationReadyEvent,ApplicationFailedEvent</span><br>        <span class="hljs-keyword">if</span> (event <span class="hljs-keyword">instanceof</span> ApplicationReadyEvent)&#123;<br>            <span class="hljs-comment">//容器初始化成功</span><br>            System.out.println(<span class="hljs-string">&quot;MyListener..容器初始化成功...&quot;</span>)；<br>        &#125;<br>        <span class="hljs-keyword">if</span> (event <span class="hljs-keyword">instanceof</span> ApplicationFailedEvent)&#123;<br>            <span class="hljs-comment">//容器初始化失败</span><br>            System,out.println(<span class="hljs-string">&quot;MyListener.,.容器初始化失购，.&quot;</span>)；<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs javascript">org.<span class="hljs-property">springframework</span>.<span class="hljs-property">context</span>.<span class="hljs-property">ApplicationListener</span>=com.<span class="hljs-property">itheima</span>.<span class="hljs-property">listener</span>.<span class="hljs-property">MyListener</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="mZzZX">BeanFactory</h3>
+Bean容器的根接口，提供Bean对象的创建、配置、依赖注入等功能
+
+<p><img src="/2024/10/10/Java%E9%9D%A2%E8%AF%95%E2%80%94%E2%80%94SpringBoot%E7%AF%87/1725187658224-155ccf1f-25fa-4766-905f-7868647cb67b.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024/10/10/Java%E9%9D%A2%E8%AF%95%E2%80%94%E2%80%94SpringBoot%E7%AF%87/1725187658193-0d041178-b911-42de-8021-825c9fc07027.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024/10/10/Java%E9%9D%A2%E8%AF%95%E2%80%94%E2%80%94SpringBoot%E7%AF%87/1725187658117-71f19325-413e-4eb8-a6eb-94e98baf1127.png" srcset="/img/loading.gif" lazyload></p>
+<h4 id="I29Gy">使用方法</h4>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@SpringBootApplication</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">App</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[]args)</span>&#123;<br>        <span class="hljs-type">ConfigurableApplicationContext</span> <span class="hljs-variable">context</span> <span class="hljs-operator">=</span> SpringApplication.run(App.class,args);I<br>         <br>        <span class="hljs-comment">//AnnotationConfigServletWebServerApplicationContext</span><br>        System.out.println(context.getClass());<br>        <br>        <span class="hljs-type">App</span> <span class="hljs-variable">appBean</span> <span class="hljs-operator">=</span> context.getBean(App.class);<br>        System.out.println(appBean);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="TT6Sv">BeanDefinition</h3>
+用于描述Bean,包括Bean的名称，Bean的属性，Bean的行为，实现的接口，添加的注解等等，Spring中，Bean在创建之前，都需要封装成对应的BeanDefinition,然后根据BeanDefinitioni进一步创建Bean对象。
+
+<p><img src="/2024/10/10/Java%E9%9D%A2%E8%AF%95%E2%80%94%E2%80%94SpringBoot%E7%AF%87/1725187675291-d0fff1ec-483d-4078-910a-3e61bc2ee9e7.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024/10/10/Java%E9%9D%A2%E8%AF%95%E2%80%94%E2%80%94SpringBoot%E7%AF%87/1725187675279-2a760d6e-8369-472a-9811-ca15d08538e0.png" srcset="/img/loading.gif" lazyload></p>
+<h4 id="VyRyu">使用方式</h4>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Component</span><span class="hljs-comment">//Bean对应的信息回封装到ScannedGenericBeanDefinition</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">User</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Configuration</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">MyConfig</span>&#123;<br>    <span class="hljs-meta">@Bean</span><br>    <span class="hljs-keyword">public</span> String <span class="hljs-title function_">aa</span><span class="hljs-params">()</span>&#123;<br>        <span class="hljs-keyword">return</span><span class="hljs-string">&quot;我爱所有的美女&quot;</span>；<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@SpringBootApplication</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">App</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[]args)</span>&#123;<br>        <span class="hljs-type">ConfigurableApplicationContext</span> <span class="hljs-variable">context</span> <span class="hljs-operator">=</span> SpringApplication.run(App.class,args);I<br>         <br>         <span class="hljs-comment">//获取BeanDefinition对象</span><br>        ConfigurableListableBeanFactory beanFactory context.getBeanFactory();<br>        BeanDefinition userBdf beanFactory.getBeanDefinition(beanName:<span class="hljs-string">&quot;user&quot;</span>);<br>        BeanDefinition aaBdf beanFactory.getBeanDefinition(beanName:<span class="hljs-string">&quot;aa&quot;</span>);<br>        System.out.println(userBdf.getclass()); <span class="hljs-comment">//ScannedGenericBeanDefinition</span><br>        System.out.println(aaBdf.getclass()); <span class="hljs-comment">//ConfigurationClassBeanDefinition</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="xDbtR">BeanFactoryPostProcessor</h3>
+Bean工厂后置处理器，当BeanFactory.准备好了后(Bean初始化之前)，会调用该接口的postProcessBeanFactory)方法，经常用于新增BeanDefinition。
+
+<p><img src="/2024/10/10/Java%E9%9D%A2%E8%AF%95%E2%80%94%E2%80%94SpringBoot%E7%AF%87/1725187689406-6ad8c83e-eb9c-416a-8566-d19cde17fb60.png" srcset="/img/loading.gif" lazyload></p>
+<h4 id="yO5pX">使用方式</h4>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs plain">public class Teacher &#123;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Component</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">MyBeanFactoryPostProcessor</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">BeanFactoryPostProcessor</span>&#123;<br>    <span class="hljs-comment">//当beanFactory被实例化好后(bean创建之前)，回调这个函数，注册一些BeanDefinition</span><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">postProcessBeanFactory</span><span class="hljs-params">(ConfigurableListableBeanFactory beanFactory)</span><span class="hljs-keyword">throws</span> BeansException&#123;<br>        <span class="hljs-comment">//注册一个Teacher的BeanDefinition</span><br>        GenericBeanDefinition gbdf <span class="hljs-keyword">new</span> <span class="hljs-title class_">GenericBeanDefinition</span>();<br>        gbdf.setBeanClass(Teacher.class);<br>        <span class="hljs-comment">//向下强转</span><br>        DefaultListableBeanFactory <span class="hljs-title function_">dbf</span> <span class="hljs-params">(DefaultListableBeanFactory)</span>beanFactory;<br>        dbf.registerBeanDefinition(beanName:<span class="hljs-string">&quot;teacher&quot;</span>,gbdf);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@SpringBootApplication</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">App</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[]args)</span>&#123;<br>        <span class="hljs-type">ConfigurableApplicationContext</span> <span class="hljs-variable">context</span> <span class="hljs-operator">=</span> SpringApplication.run(App.class,args);I<br>         <br>         System.out.println(context.getBean(name:<span class="hljs-string">&quot;teacher&quot;</span>));<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="cy2AC">Aware</h3>
+感知接口，Spring提供的一种机制，通过实现该接口，重写方法，可以感知Spring应用程序执行过程中的一些变化。Spring会判断当前的Bean有没有实现Aware接口，如果实现了，会在特定的时机回调接口对应的方法。
+
+<p><img src="/2024/10/10/Java%E9%9D%A2%E8%AF%95%E2%80%94%E2%80%94SpringBoot%E7%AF%87/1725187697449-c4f334b5-f514-4465-83fd-84217bbd6e41.png" srcset="/img/loading.gif" lazyload></p>
+<h4 id="X75qP">使用方法</h4>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Component</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Student</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">BeanNameAware</span>,BeanclassLoaderAware,BeanFactoryAware&#123;<br>    <span class="hljs-comment">//BeanclassLoader的回调方法</span><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">setBeanclassLoader</span><span class="hljs-params">(CLassLoader classLoader)</span>&#123;<br>        System.out.println(<span class="hljs-string">&quot;Student...setBeanclassLoader...&quot;</span>+classLoader);<br>    &#125;<br>    <span class="hljs-comment">//BeanFactoryAware的回调方法</span><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">setBeanFactory</span><span class="hljs-params">(BeanFactory beanFactory)</span><span class="hljs-keyword">throws</span> BeansException<br>    System.out.println(<span class="hljs-string">&quot;Student...setBeanFactory...&quot;</span>+beanFactory);<br>&#125;<br><span class="hljs-comment">//BeanNameAware的回调方法</span><br><span class="hljs-meta">@Override</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">setBeanName</span><span class="hljs-params">(String name)</span>&#123;<br>System.out.println(<span class="hljs-string">&quot;Student...setBeanName...&quot;</span>+name);<br>&#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<h3 id="GtBIE">InitializingBean/DisposableBean</h3>
+
+<ul>
+<li>初始化接口，当Bean被实例化好后，会回调里面的函数，经常用于做一些加载资源的工作</li>
+<li>销毁接口，当Bean被销毁之前，会回调里面的函数，经常用于做一些释放资源的工作</li>
+</ul>
+<h4 id="I9Yaf">使用方法</h4>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Component</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Animal</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">InitializingBean</span>,DisposableBean&#123;<br><br>    <span class="hljs-comment">//PostConstructor,PreDestroy,提供初始化方法和销毁方法的注解</span><br>    <span class="hljs-meta">@PostConstruct</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">initMethod</span><span class="hljs-params">()</span>&#123;<br>        System.out.println(<span class="hljs-string">&quot;Animal...PostConstruct..initMethod&quot;</span>);<br>    &#125;<br>    <span class="hljs-meta">@PreDestroy</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">destroyMethod</span><span class="hljs-params">()</span>&#123;<br>        System.out.println(<span class="hljs-string">&quot;Animal...PreDestroy..destroyMethod&quot;</span>);<br>    &#125;<br><br>    <span class="hljs-comment">//手动实现初始化方法和销毁方法</span><br>    <span class="hljs-comment">//销毁方法</span><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">destroy</span><span class="hljs-params">()</span><span class="hljs-keyword">throws</span> Exception&#123;<br>        System.out.println(<span class="hljs-string">&quot;Animal...destroy...&quot;</span>);<br>    &#125;<br>    <span class="hljs-comment">//初始化方法</span><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">afterPropertiesSet</span><span class="hljs-params">()</span><span class="hljs-keyword">throws</span> Exception&#123;<br>        System.out.println(<span class="hljs-string">&quot;Animal...afterPropertiesSet...&quot;</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="foAYo">BeanPostProcessor</h3>
+Bean的后置处理器，当Bean对象初始化之前以及初始化之后，会回调该接口对应的方法
+
+<p><img src="/2024/10/10/Java%E9%9D%A2%E8%AF%95%E2%80%94%E2%80%94SpringBoot%E7%AF%87/1725187713651-2076b85c-a651-412a-b855-419ecaaedae9.png" srcset="/img/loading.gif" lazyload></p>
+<h4 id="me62Z">使用方法</h4>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Component</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">MyBeanPostProcessor</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">BeanPostProcessor</span>&#123;<br>    <span class="hljs-comment">//初始化之前调用</span><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> Object <span class="hljs-title function_">postProcessBeforeInitialization</span><span class="hljs-params">(Object bean,String beanName)</span><span class="hljs-keyword">throws</span> BeansException&#123;<br>        System.out.println(<span class="hljs-string">&quot;MyBeanPostProcessor...postProcessBeforeInitialization...&quot;</span>+beanName);<br>        <span class="hljs-keyword">return</span> BeanPostProcessor.<span class="hljs-built_in">super</span>.postProcessBeforeInitialization(bean,beanName);<br>    &#125;<br><br>    <span class="hljs-comment">//初始化之后调用</span><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> object <span class="hljs-title function_">postProcessAfterInitialization</span><span class="hljs-params">(object bean,String beanName)</span><span class="hljs-keyword">throws</span> BeansException&#123;<br>        System.out.println(<span class="hljs-string">&quot;MyBeanPostProcessor...postProcessAfterInitialization...&quot;</span>+beanName);<br>        <span class="hljs-keyword">return</span> BeanPostProcessor.<span class="hljs-built_in">super</span>.postProcessAfterInitialization(bean,beanName);<br>    &#125; <br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="V2ZQc">面试题</h2>
+<h3 id="qQhDn">SpringBoot启动流程</h3>
+
+<p><img src="/2024/10/10/Java%E9%9D%A2%E8%AF%95%E2%80%94%E2%80%94SpringBoot%E7%AF%87/1725187727190-4965d62d-9804-4e33-bfd7-f35a048e2e17-172856656426912.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024/10/10/Java%E9%9D%A2%E8%AF%95%E2%80%94%E2%80%94SpringBoot%E7%AF%87/1725187726518-ef7d09e4-471f-4567-a1a5-fd8fa2b35f10.png" srcset="/img/loading.gif" lazyload></p>
+<p>总：SpringBoot启动，其本质就是<strong>加载各种配置信息，然后初始化Ioc容器并返回</strong></p>
+<p>分：在其启动的过程中会做这么几个事情<br>    首先，当我们在启动类执行SpringApplication.run这行代码的时候，在它的方法内部其实会做两个事情<br>        1.<strong>创建SpringApplication对象；</strong><br>        2.<strong>执行run方法。</strong><br>    其次，在创建SpringApplication对象的时候，在它的构造方法内部主要做3个事情。<br>        1.<strong>确认web应用类型</strong>，一般情况下是Servlet类型，这种类型的应用，将来会自动启动一个tomcat<br>        2.从spring.factories配置文件中，<strong>加载默认的ApplicationContextInitializer和ApplicationListener</strong><br>        3.<strong>记录当前应用的主启动类</strong>，将来做包扫描使用<br>    最后，对象创建好了以后，再调用该对象的run方法，在run方法的内部主要做4个事情<br>        1.<strong>准备Environment对象</strong>，它里面会封装一些当前应用运行环境的参数，比如环境变量等等<br>        2.<strong>实例化容器</strong>，这里仅仅是创建ApplicationContext对象<br>        3.容器创建好了以后，会<strong>为容器做一些准备工作</strong>，比如为容器设置Environment、BeanFactoryPostProcessor后置处理器，并且加载主类对应的Definition<br>        4.<strong>刷新容器</strong>，就是我们常说的referesh,在这里会真正的创建Bean实例</p>
+<p>总：总结一下我刚说的，其实SpringBoot启动的时候核心就两步，创建SpringApplication对象以及run方法的调用，在run方法中会真正的实例化容器，并创建容器中需要的Bean实例，最终返回。</p>
+<h3 id="M48k0">IOC容器初始化流程</h3>
+
+<p><img src="/2024/10/10/Java%E9%9D%A2%E8%AF%95%E2%80%94%E2%80%94SpringBoot%E7%AF%87/1725239887791-018247f7-97ee-4025-8ce2-2762678ef040.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024/10/10/Java%E9%9D%A2%E8%AF%95%E2%80%94%E2%80%94SpringBoot%E7%AF%87/1725269735691-83b7cae9-18f2-4afa-8c58-cc6ff1f07ab4.png" srcset="/img/loading.gif" lazyload></p>
+<p><strong>总：</strong>IOC容器的初始化，核心工作是在<strong>AbstractApplicationContext..refresh</strong>,方法中完成的</p>
+<p><strong>分：</strong>在refresh方法中主要做了这么几件事</p>
+<p>1.<strong>准备BeanFactory</strong>,在这一块需要给BeanFacory设置很多属性，比如类加载器、Environment等</p>
+<p>2.<strong>执行BeanFactory后置处理器</strong>，这一阶段会扫描要放入到容器中的Bean信息，得到对应的BeanDefinition(注意，这里只扫描，不创建)》</p>
+<p>3.是<strong>注册BeanPostProcesor</strong>,,我们自定义的BeanPostProcessor就是在这一个阶段被加载的，将来Bean对象实例化好后需要用到</p>
+<p>4.<strong>启动tomcat</strong></p>
+<p>5.<strong>实例化容器中实例化非懒加载的单例Bean</strong>,这里需要说的是，多例Bean和懒加载的Bean不会在这个阶段实例化，将来用到的时候再创建</p>
+<p>6.当容器初始化完毕后，再做一些<strong>扫尾工作</strong>，比如清除缓存等</p>
+<p><strong>总：</strong>简单总结一下，在IOC容器初始化的的过程中，首先得**<u>准备并执行BeanFactory后置处理器</u><strong>，其次得</strong><u>注册Bean后置处理器</u><strong>，并</strong><u>启动tomcat,</u><strong>.最后需要</strong><u>借助于BeanFactory完成Bean的实例化</u>**</p>
+<h3 id="JVQoF">Bean的生命周期</h3>
+
+<p><img src="/2024/10/10/Java%E9%9D%A2%E8%AF%95%E2%80%94%E2%80%94SpringBoot%E7%AF%87/1725270255880-7fee4917-9ac3-4d36-961a-5e0b35fa2121.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024/10/10/Java%E9%9D%A2%E8%AF%95%E2%80%94%E2%80%94SpringBoot%E7%AF%87/1725271239323-8966145d-d264-4f63-bebe-294c2b713e6d.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024/10/10/Java%E9%9D%A2%E8%AF%95%E2%80%94%E2%80%94SpringBoot%E7%AF%87/1725271319052-292cbd71-9a06-4d32-a0e8-a3d38d256230.png" srcset="/img/loading.gif" lazyload></p>
+<p><strong>总：</strong>Bea的生命周期总的来说有4个阶段，分别有<u>创建对象，</u><u><font style="background-color:#FBDE28;">初始化对象</font></u><u>，使用对象以及销毁对象</u>，而且这些工作大部分是交给<strong>Bean工厂的doCreateBean方法</strong>完成的</p>
+<p><strong>分：</strong></p>
+<p>首先，在创建对象阶段，先调用构造方法<strong>实例化对象</strong>，对象有了后会<strong>填充该对象的内容</strong>，其实就是处理<strong>依赖注入</strong></p>
+<p>其次，对象创建完毕后，需要做一些<strong>初始化的操作</strong>，在这里涉及到几个扩展点。</p>
+<p>1.执行<strong>Aware感知接口</strong>的回调方法</p>
+<p>2.执行Bean后置处理器的<strong>postProcessBeforelnitialization方法</strong></p>
+<p>3.执行<strong>InitializingBean接口的回调</strong>，在这一步如果Bean中有标注了@PostConstructi注解的方法，会先执行它</p>
+<p>4.执行Bean后置处理器的<strong>postProcessAfterlnitialization</strong></p>
+<p>把这些扩展点都执行完，Bean的初始化就完成了</p>
+<p>接下来，在使用阶段就是程序员从容器中获取该Bean使用即可</p>
+<p>最后，在容器销毁之前，会先<strong>销毁对象</strong>，此时会执行Disposable Bean接口的回调，这一步如果Bean中有标注了@PreDestroy接口的函数，会先执行它</p>
+<p><strong>总：</strong>简单总结一下，Bea的生命周期共包含四个阶段，其中初始化对象和销毁对象我们程序员可以通过一些扩展点执行自己的代码</p>
+<h3 id="VU3hV">Bean循环依赖</h3>
+![](Java面试——SpringBoot篇/1725341720272-9eaf5725-4656-46d3-a9da-c996fd742fa1.png)
+
+<p><img src="/2024/10/10/Java%E9%9D%A2%E8%AF%95%E2%80%94%E2%80%94SpringBoot%E7%AF%87/1725342427033-0e236bc9-c218-4b1a-b7b8-22d32e8b4dc7.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024/10/10/Java%E9%9D%A2%E8%AF%95%E2%80%94%E2%80%94SpringBoot%E7%AF%87/1725343132168-ec215d6c-26c2-4ee9-a440-d4f960184fea.png" srcset="/img/loading.gif" lazyload></p>
+<p><strong>总：</strong>Bean的循环依赖指的是A依赖B,B又依赖A这样的依赖闭环问题，在Springl中，通过<strong>三个对象缓存区</strong>来解决循环依赖问题，这三个缓存区被定义到了<strong>DefaultSingletonBeanRegistry</strong>中，分别是<strong>singletonObjects</strong>用来存储创建完毕的Bean,<strong>earlySingletonObjects</strong>用来存储未完成依赖注入的Bean,还有<strong>SingletonFactories</strong>用来存储创建Bean的ObjectFactory。假如说现在A依赖B,B依赖A,整个Bean的创建过程是这样的</p>
+<p><strong>分：</strong></p>
+<p>首先，调用A的构造方法<strong>实例化A</strong>,当前的A还没有处理依赖注入，暂且把它称为半成品，此时会把<strong>半成品A封装到一个ObjectFactory中</strong>，并存储到springFactories缓存区</p>
+<p>接下来，要<strong>处理A的依赖注入</strong>了，由于此时还没有B,所以得先<strong>实例化一个B</strong>,同样的，半成品<strong>B也会被封装到ObjectFactory</strong>中并存储到springFactory缓存区</p>
+<p>紧接着，要<strong>处理B的依赖注入</strong>了，此时会找到springFactories中A对应的ObjecFactory,调用它的<strong>getObject方法</strong>得到刚才实例化的半成品A(如果需要代理对象，则会自动创建代理对象，将来得到的就是代理对象)，把得到的<strong>半成品A注入给B</strong>,并同时会把<strong>半成品A存入到earlySingletonObjects</strong>中，将来如果还有其他的类循环依赖了A,就可以直接从earlySingletonObjects中找到它了，那么此时springFactories中<strong>创建A的ObjectFactory也可以删除</strong>了。</p>
+<p>至此，B的依赖注入处理完了后，B就创建完毕了，就可以把<strong>B的对象存入到singletonObjects</strong>中了，并同时<strong>删除掉springFactories中创建B的ObjectFactory</strong></p>
+<p>B创建完毕后，就可以<strong>继续处理A的依赖注入</strong>了，把B注入给A,此时A也创建完毕了，就可以把<strong>A的对象存储到singletonObjects</strong>中，并同时<strong>删除掉earlySingletonObjects中的半成品A</strong></p>
+<p>截此为止，A和B对象全部<strong>创建完毕</strong>，并存储到了singletonObjects中，将来通过容器获取对象，都是<strong>从singletonObejcts中获取</strong>。</p>
+<p><strong>总：</strong>总结起来还是一句话，借助于DefaultSingletonBeanRegistry的三个缓存区可以解决循环依赖问题</p>
+<h3 id="SN4VA">SpringMvc执行流程</h3>
+![](Java面试——SpringBoot篇/1725344403683-f6f596c2-623a-447d-b615-60aeeda5e1d9.png)
+
+<p><strong>总：</strong>使用了SpringMvc后，所有的请求都需要经过DispatcherServlet前端控制器，该类中提供了一个doDispatch方法，有关请求处理和结果响应的所有流程都在该方法中完成</p>
+<p><strong>分：</strong></p>
+<p>首先，借助于HandlerMapping处理器映射器得到处理器执行链，里面封装了HandlerMethod代表目标Controller的方法，同时还通过一个集合记录了要执行的拦截器。</p>
+<p>接下来，会根据HandlerMethod获取对应的HandlerAdapter处理器适配器，里面封装了参数解析器以及结果处理器。</p>
+<p>然后，执行拦截器的preHandle方法。</p>
+<p>接下来是核心，通过HandlerAdapter处理器适配器执行目标Controller的方法，在这个过程中会通过参数解析器和结果处理器分别解析浏览器提交的数据以及处理Controller方法返回的结果。</p>
+<p>然后，执行拦截器的postHandle方法。</p>
+<p>最后处理响应，在这个过程中如果有异常抛出，会执行异常的逻辑，这里还会执行全局异常处理器的逻辑，并通过视图解析器ViewResolver解析视图，再渲染视图，最后再执行拦截器的afterCompletion。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%8A%AA%E5%8A%9B%E6%88%90%E4%B8%BA%E7%89%9B%E9%A9%AC/" class="category-chain-item">努力成为牛马</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E9%9D%A2%E8%AF%95/" class="print-no-link">#面试</a>
+      
+        <a href="/tags/JAVA/" class="print-no-link">#JAVA</a>
+      
+        <a href="/tags/SpringBoot/" class="print-no-link">#SpringBoot</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Java面试——SpringBoot篇</div>
+      <div>https://blog.guxiang.lol/2024/10/10/Java面试——SpringBoot篇/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>柴勇玛喜达</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年10月10日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/10/10/Java%E9%9D%A2%E8%AF%95%E2%80%94%E2%80%94%E5%9F%BA%E7%A1%80%E7%AF%87/" title="Java面试——基础篇">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Java面试——基础篇</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/10/10/%E5%A4%9A%E6%95%B0%E5%85%83%E7%B4%A0/" title="多数元素">
+                        <span class="hidden-mobile">多数元素</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    
+      <script type="text/javascript">
+        var disqus_config = function() {
+          this.page.url = 'https://blog.guxiang.lol/2024/10/10/Java%E9%9D%A2%E8%AF%95%E2%80%94%E2%80%94SpringBoot%E7%AF%87/';
+          this.page.identifier = '/2024/10/10/Java%E9%9D%A2%E8%AF%95%E2%80%94%E2%80%94SpringBoot%E7%AF%87/';
+        };
+        Fluid.utils.loadComments('#disqus_thread', function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//' + 'fluid' + '.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', new Date());
+          (d.head || d.body).appendChild(s);
+        });
+      </script>
+    
+    <noscript>Please enable JavaScript to view the comments</noscript>
+  </div>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  <span id="timeDate">载入天数...</span>
+  <span id="times">载入时分秒...</span>
+  <script>
+  var now = new Date();
+  function createtime(){
+      var grt= new Date("10/09/2024 00:00:00");//此处修改你的建站时间或者网站上线时间
+      now.setTime(now.getTime()+250);
+      days = (now - grt ) / 1000 / 60 / 60 / 24;
+      dnum = Math.floor(days);
+      hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum);
+      hnum = Math.floor(hours);
+      if(String(hnum).length ==1 ){
+          hnum = "0" + hnum;
+      }
+      minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+      mnum = Math.floor(minutes);
+      if(String(mnum).length ==1 ){
+                mnum = "0" + mnum;
+      }
+      seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+      snum = Math.round(seconds);
+      if(String(snum).length ==1 ){
+                snum = "0" + snum;
+      }
+      document.getElementById("timeDate").innerHTML = "🚀 for&nbsp"+dnum+"&nbspdays";  //此次自定义显示内容
+      document.getElementById("times").innerHTML = hnum + "&nbsphr&nbsp" + mnum + "&nbspmin&nbsp" + snum + "&nbspsec";
+  }  //此次自定义显示内容
+  setInterval("createtime()",250);
+  </script>
+</div>
+
+<div>
+  
+</div>
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  var relativeDate = function() {
+    var updatedTime = document.getElementById('updated-time');
+    if (updatedTime) {
+      var text = updatedTime.textContent;
+      var reg = /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:Z|[+-]\d{2}:\d{2})/;
+      var matchs = text.match(reg);
+      if (matchs) {
+        var relativeTime = moment(matchs[0]).fromNow();
+        updatedTime.textContent = text.replace(reg, relativeTime);
+      }
+      updatedTime.style.display = '';
+    }
+  };
+  Fluid.utils.createScript('https://lib.baomitu.com/moment.js/2.29.4/moment.min.js', function() {
+    if (!'zh-cn'.startsWith('en')) {
+      Fluid.utils.createScript('https://lib.baomitu.com/moment.js/2.29.4/locale/zh-cn.min.js', function() {
+        relativeDate();
+      });
+    } else {
+      relativeDate();
+    }
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/gh/EmoryHuang/BlogBeautify@1.1/DynamicRibbon.min.js"></script>
+<script src="//cdn.jsdelivr.net/gh/EmoryHuang/BlogBeautify@1.1/snowflake.min.js"></script>
+<script src="//cdn.jsdelivr.net/gh/EmoryHuang/BlogBeautify@1.1/love.min.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+<!-- hexo injector body_end start --><script src="/js/backgroundize.js"></script><!-- hexo injector body_end end --></body>
+</html>

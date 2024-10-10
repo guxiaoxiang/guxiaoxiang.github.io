@@ -19,15 +19,15 @@
   <meta name="author" content="柴勇玛喜达">
   <meta name="keywords" content="">
   
-    <meta name="description" content="给定两个字符串s和t，编写一个函数来判断t是否是s的字母异位词。 示例 1: 12输入: s &#x3D; &quot;anagram&quot;, t &#x3D; &quot;nagaram&quot;输出: true  示例 2: 12输入: s &#x3D; &quot;rat&quot;, t &#x3D; &quot;car&quot;输出: false    解法1 12345678910111213&#x2F;&#x2F;将两个字符串转为字">
+    <meta name="description" content="给定一个大小为 n_ _的数组 nums ，返回其中的多数元素。多数元素是指在数组中出现次数 大于 ⌊ n&#x2F;2 ⌋ 的元素。你可以假设数组是非空的，并且给定的数组总是存在多数元素。示例 1： 12输入：nums &#x3D; [3,2,3]输出：3 示例 2： 12输入：nums &#x3D; [2,2,1,1,1,2,2]输出：2  解法1：HashMap123456789101112131415161718192">
 <meta property="og:type" content="article">
-<meta property="og:title" content="有效字母异位词">
-<meta property="og:url" content="https://blog.guxiang.lol/2024/10/08/%E6%9C%89%E6%95%88%E5%AD%97%E6%AF%8D%E5%BC%82%E4%BD%8D%E8%AF%8D/index.html">
+<meta property="og:title" content="多数元素">
+<meta property="og:url" content="https://blog.guxiang.lol/2024/10/10/%E5%A4%9A%E6%95%B0%E5%85%83%E7%B4%A0/index.html">
 <meta property="og:site_name" content="柴勇玛喜达のBLOG">
-<meta property="og:description" content="给定两个字符串s和t，编写一个函数来判断t是否是s的字母异位词。 示例 1: 12输入: s &#x3D; &quot;anagram&quot;, t &#x3D; &quot;nagaram&quot;输出: true  示例 2: 12输入: s &#x3D; &quot;rat&quot;, t &#x3D; &quot;car&quot;输出: false    解法1 12345678910111213&#x2F;&#x2F;将两个字符串转为字">
+<meta property="og:description" content="给定一个大小为 n_ _的数组 nums ，返回其中的多数元素。多数元素是指在数组中出现次数 大于 ⌊ n&#x2F;2 ⌋ 的元素。你可以假设数组是非空的，并且给定的数组总是存在多数元素。示例 1： 12输入：nums &#x3D; [3,2,3]输出：3 示例 2： 12输入：nums &#x3D; [2,2,1,1,1,2,2]输出：2  解法1：HashMap123456789101112131415161718192">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2024-10-08T15:04:27.417Z">
-<meta property="article:modified_time" content="2024-10-10T09:42:17.813Z">
+<meta property="article:published_time" content="2024-10-10T09:22:57.599Z">
+<meta property="article:modified_time" content="2024-10-10T09:40:21.953Z">
 <meta property="article:author" content="柴勇玛喜达">
 <meta property="article:tag" content="JAVA">
 <meta property="article:tag" content="算法">
@@ -37,7 +37,7 @@
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>有效字母异位词 - 柴勇玛喜达のBLOG</title>
+  <title>多数元素 - 柴勇玛喜达のBLOG</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -220,7 +220,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle">有效字母异位词</span>
+            <span id="subtitle">多数元素</span>
           
         </div>
 
@@ -231,8 +231,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-10-08 23:04" pubdate>
-          2024年10月8日 晚上
+        <time datetime="2024-10-10 17:22" pubdate>
+          2024年10月10日 下午
         </time>
       </span>
     
@@ -243,7 +243,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          238 字
+          302 字
         
       </span>
     
@@ -254,7 +254,7 @@
         
         
         
-          2 分钟
+          3 分钟
         
       </span>
     
@@ -300,12 +300,12 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">有效字母异位词</h1>
+            <h1 id="seo-header">多数元素</h1>
             
               <p id="updated-time" class="note note-info" style="display: none">
                 
                   
-                    本文最后更新于 2024-10-10T17:42:17+08:00
+                    本文最后更新于 2024-10-10T17:40:21+08:00
                   
                   
 
@@ -315,21 +315,14 @@
             
               <div class="markdown-body">
                 
-                <p>给定两个字符串s和t，编写一个函数来判断t是否是s的字母异位词。</p>
-<p><strong>示例 1:</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs plain">输入: s = &quot;anagram&quot;, t = &quot;nagaram&quot;<br>输出: true<br></code></pre></td></tr></table></figure>
-
-<p><strong>示例 2:</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs plain">输入: s = &quot;rat&quot;, t = &quot;car&quot;<br>输出: false<br></code></pre></td></tr></table></figure>
-
-
-
-<h2 id="Jy0cv">解法1</h2>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//将两个字符串转为字符数组后，排序并进行比较</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">isAnagram</span><span class="hljs-params">(String s, String t)</span> &#123;<br>        <span class="hljs-keyword">if</span> (s.length() != t.length()) &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>        &#125;<br>        <span class="hljs-type">char</span>[] str1 = s.toCharArray();<br>        <span class="hljs-type">char</span>[] str2 = t.toCharArray();<br>        Arrays.sort(str1);<br>        Arrays.sort(str2);<br>        <span class="hljs-keyword">return</span> Arrays.equals(str1, str2);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
-
-<h2 id="A3zSx">解法2</h2>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//用一个1*26的数组代表26个字母</span><br><span class="hljs-comment">//遍历s，对应的字母++</span><br><span class="hljs-comment">//再遍历t，对应字母--</span><br><span class="hljs-comment">//若出现小于0的结果，则代表出现了s中没有的字母</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">isAnagram</span><span class="hljs-params">(String s, String t)</span> &#123;<br>        <span class="hljs-keyword">if</span> (s.length() != t.length()) &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>        &#125;<br>        <span class="hljs-type">int</span>[] table = <span class="hljs-keyword">new</span> <span class="hljs-title class_">int</span>[<span class="hljs-number">26</span>];<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; s.length(); i++) &#123;<br>            table[s.charAt(i) - <span class="hljs-string">&#x27;a&#x27;</span>]++;<br>        &#125;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; t.length(); i++) &#123;<br>            table[t.charAt(i) - <span class="hljs-string">&#x27;a&#x27;</span>]--;<br>            <span class="hljs-keyword">if</span> (table[t.charAt(i) - <span class="hljs-string">&#x27;a&#x27;</span>] &lt; <span class="hljs-number">0</span>) &#123;<br>                <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
-
+                <p>给定一个大小为 <code>n</code>_ _的数组 <code>nums</code> ，返回其中的多数元素。多数元素是指在数组中出现次数 <strong>大于</strong> <code>⌊ n/2 ⌋</code> 的元素。<br>你可以假设数组是非空的，并且给定的数组总是存在多数元素。<br><strong>示例 1：</strong></p>
+<figure class="highlight fix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs fix"><span class="hljs-attr">输入：nums </span>=<span class="hljs-string"> [3,2,3]</span><br><span class="hljs-string">输出：3</span><br></code></pre></td></tr></table></figure>
+<p><strong>示例 2：</strong></p>
+<figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs accesslog">输入：nums = <span class="hljs-string">[2,2,1,1,1,2,2]</span><br>输出：<span class="hljs-number">2</span><br></code></pre></td></tr></table></figure>
+<p><a name="wbMao"></a></p>
+<h2 id="解法1：HashMap"><a href="#解法1：HashMap" class="headerlink" title="解法1：HashMap"></a>解法1：HashMap</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">majorityElement</span><span class="hljs-params">(<span class="hljs-type">int</span>[] nums)</span> &#123;<br>        Map&lt;Integer,Integer&gt; counts = countNums(nums);<br><br>        Map.Entry&lt;Integer,Integer&gt; major = <span class="hljs-literal">null</span>;<br><br>        <span class="hljs-comment">//Map.entrySet() 得到Map中所有键值对的Set</span><br>        <span class="hljs-keyword">for</span>(Map.Entry&lt;Integer,Integer&gt; entry : counts.entrySet()) &#123;<br>            <span class="hljs-keyword">if</span>(major == <span class="hljs-literal">null</span> || entry.getValue() &gt; major.getValue()) &#123;<br>                major = entry;<br>            &#125;<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> major.getKey();<br>    &#125;<br><br>    <span class="hljs-comment">//countNums方法将数组中的元素及其出现的次数进行统计</span><br>    <span class="hljs-keyword">public</span> Map&lt;Integer,Integer&gt; <span class="hljs-title function_">countNums</span><span class="hljs-params">(<span class="hljs-type">int</span>[] arr)</span> &#123;<br><br>        Map&lt;Integer, Integer&gt; hashmap = <span class="hljs-keyword">new</span> <span class="hljs-title class_">HashMap</span>&lt;Integer,Integer&gt;();<br><br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; arr.length; i++) &#123;<br>            <span class="hljs-comment">//Map.containsKey(key) 表示Map中是否包含该key</span><br>            <span class="hljs-keyword">if</span>(hashmap.containsKey(arr[i])) &#123;<br>                <span class="hljs-comment">//map中更新某个key对应的value，直接重新put就行</span><br>                hashmap.put(arr[i], hashmap.get(arr[i])+<span class="hljs-number">1</span>);<br>            &#125;<span class="hljs-keyword">else</span> &#123;<br>                hashmap.put(arr[i], <span class="hljs-number">1</span>);<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> hashmap;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p><a name="VjNhS"></a></p>
+<h2 id="解法2：排序"><a href="#解法2：排序" class="headerlink" title="解法2：排序"></a>解法2：排序</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">majorityElement</span><span class="hljs-params">(<span class="hljs-type">int</span>[] nums)</span> &#123;<br>        <span class="hljs-comment">//出现次数大于n/2，直接排序完去索引为n/2处的值</span><br>        Arrays.sort(nums);<br>        <span class="hljs-keyword">return</span> nums[nums.length / <span class="hljs-number">2</span>];<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
                 
               </div>
@@ -377,8 +370,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>有效字母异位词</div>
-      <div>https://blog.guxiang.lol/2024/10/08/有效字母异位词/</div>
+      <div>多数元素</div>
+      <div>https://blog.guxiang.lol/2024/10/10/多数元素/</div>
     </div>
     <div class="license-meta">
       
@@ -390,7 +383,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2024年10月8日</div>
+          <div>2024年10月10日</div>
         </div>
       
       
@@ -422,15 +415,21 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/10/10/%E4%B8%A4%E6%95%B0%E4%B9%8B%E5%92%8C/" title="两数之和">
+                      <a href="/2024/10/10/Java%E9%9D%A2%E8%AF%95%E2%80%94%E2%80%94SpringBoot%E7%AF%87/" title="Java面试——SpringBoot篇">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">两数之和</span>
+                        <span class="hidden-mobile">Java面试——SpringBoot篇</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
                   </article>
                   <article class="post-next col-6">
                     
+                    
+                      <a href="/2024/10/10/%E5%90%88%E5%B9%B6%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84/" title="合并有序数组">
+                        <span class="hidden-mobile">合并有序数组</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
                     
                   </article>
                 </div>
@@ -447,8 +446,8 @@
     
       <script type="text/javascript">
         var disqus_config = function() {
-          this.page.url = 'https://blog.guxiang.lol/2024/10/08/%E6%9C%89%E6%95%88%E5%AD%97%E6%AF%8D%E5%BC%82%E4%BD%8D%E8%AF%8D/';
-          this.page.identifier = '/2024/10/08/%E6%9C%89%E6%95%88%E5%AD%97%E6%AF%8D%E5%BC%82%E4%BD%8D%E8%AF%8D/';
+          this.page.url = 'https://blog.guxiang.lol/2024/10/10/%E5%A4%9A%E6%95%B0%E5%85%83%E7%B4%A0/';
+          this.page.identifier = '/2024/10/10/%E5%A4%9A%E6%95%B0%E5%85%83%E7%B4%A0/';
         };
         Fluid.utils.loadComments('#disqus_thread', function() {
           var d = document, s = d.createElement('script');
